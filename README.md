@@ -2,17 +2,15 @@
 
 ## Installation
 
-
-```javascript
-tns plugin add nativescript-popup
-```
+`tns plugin add nativescript-popup`
 
 ## Usage 
-    ```xml
+```xml
     <Button tap="openPopup"/>
-    ```
+```
 	
-	```ts
+
+```ts
     import { Popup } from 'nativescript-popup';
 
     function openPopup(args){
@@ -29,8 +27,9 @@ tns plugin add nativescript-popup
     nativeView.frame = CGRectMake(0,0,50,50);
     popup.showPopup(args.object,view | nativeView);
     }
-    ```
-    
+```
+
+
 ## License
 
 Apache License Version 2.0, January 2004
