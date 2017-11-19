@@ -1,12 +1,13 @@
 {
     "name": "nativescript-popup",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "",
     "main": "popup",
     "typings": "index.d.ts",
     "nativescript": {
         "platforms": {
-            "ios": "3.0.0"
+            "ios": "3.0.0",
+            "android": "3.0.0"
         }
     },
     "scripts": {

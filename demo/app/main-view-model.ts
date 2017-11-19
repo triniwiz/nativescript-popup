@@ -11,7 +11,7 @@ export class HelloWorldModel extends Observable {
   showPopup(source, view) {
     this.popup = new Popup({ width: 100, unit: '%' });
     this.popup.showPopup(source, view).then(data => {
-      console.log(data)
+      console.log(data);
     });
   }
   hidePopup(index) {

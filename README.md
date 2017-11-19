@@ -22,10 +22,21 @@
     });
     const view = new Label();
     view.text = "Test";
+
+    /* IOS */
     const nativeView = UILabel.new();
     nativeView.text = "Native Button";
     nativeView.frame = CGRectMake(0,0,50,50);
-    popup.showPopup(args.object,view | nativeView);
+    /* IOS */
+
+    /* Android */
+    const nativeView = new new android.widget.TextView(context);
+    nativeView.setText("Native Button");
+    nativeView.setWidth(50);
+    nativeView.setHeight(50);
+    /* Android */
+
+    popup.showPopup(anchor: View | nativeView , view: View | nativeView);
     }
 ```
 
