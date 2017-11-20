@@ -1,7 +1,6 @@
 [![npm](https://img.shields.io/npm/v/nativescript-popup.svg)](https://www.npmjs.com/package/nativescript-popup)
 [![npm](https://img.shields.io/npm/dt/nativescript-popup.svg?label=npm%20downloads)](https://www.npmjs.com/package/nativescript-popup)
-
-[![Build Status](https://travis-ci.org//triniwiz/nativescript-popup.svg?branch=master)](https://travis-ci.org//triniwiz/nativescript-popup)
+[![Build Status](https://travis-ci.org//triniwiz/nativescript-popup.svg?branch=master)](https://travis-ci.org/triniwiz/nativescript-popup)
 
 ## Installation
 
