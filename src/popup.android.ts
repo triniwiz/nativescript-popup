@@ -97,7 +97,11 @@ export class Popup extends Common {
             new Color(this._options.backgroundColor).android
           );
         }
-
+        if (parseInt(device.sdkVersion, 10) >= 21) {
+          if (this._options.elevation) {
+            (this._popup as any).setElevation(this._options.elevation);
+          }
+        }
         this._popup.setWidth(utils.layout.toDevicePixels(width));
         this._popup.setHeight(utils.layout.toDevicePixels(height));
 
