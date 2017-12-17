@@ -20,6 +20,7 @@ export function showPopup() {
   const lbl: any = new Label();
   lbl.text = 'Osei';
   lbl.backgroundColor = 'red';
+  lbl.marginTop = 5;
   lbl.height = 40;
   stack.addChild(lbl);
   const lblOther: any = new Label();
@@ -45,7 +46,9 @@ export function showPopup() {
 export function showPopupList() {
   const list: any = new ListView();
   list.height = '100%';
-  const items = [{ name: 'Osei' }, { name: 'Sean' }, { name: 'Brad' }];
+  const items = [{ name: 'Osei' }, { name: 'Sean' }, { name: 'Brad' }
+  , { name: 'Some' }, { name: 'More' }, { name: 'Names' }, { name: 'To' }, { name: 'Make' }
+  , { name: 'This' }, { name: 'List' }, { name: 'Scroll' }];
   list.items = items;
   list.itemTemplate = `
     <StackLayout>

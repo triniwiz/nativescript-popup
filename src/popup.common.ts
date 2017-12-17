@@ -7,4 +7,5 @@ export class PopupOptions {
   backgroundColor?: string = '#fff';
   hideArrow?: boolean = false;
   elevation?: number;
+  borderRadius?: number;
 }

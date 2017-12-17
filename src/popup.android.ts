@@ -92,11 +92,19 @@ export class Popup extends Common {
             }
             break;
         }
+
+        const shape = new android.graphics.drawable.GradientDrawable();
+        shape.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
+
+        if (this._options && this._options.borderRadius) {
+          shape.setCornerRadius(this._options.borderRadius);
+        }
         if (this._options && this._options.backgroundColor) {
-          view.android.setBackgroundColor(
+          shape.setColor(
             new Color(this._options.backgroundColor).android
           );
         }
+        (this._popup as any).setBackgroundDrawable(shape);
         if (parseInt(device.sdkVersion, 10) >= 21) {
           if (this._options.elevation) {
             (this._popup as any).setElevation(this._options.elevation);
