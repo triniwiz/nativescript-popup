@@ -1,6 +1,6 @@
 {
     "name": "nativescript-popup",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "description": "",
     "main": "popup",
     "typings": "index.d.ts",
@@ -36,6 +36,13 @@
         "name": "Osei Fortune",
         "email": "fortune.osei@yahoo.com"
     },
+    "contributors": [
+        {
+            "name": "Shiv19",
+            "url": "https://shiv19.com",
+            "email": "sp@shiv19.com"
+        }
+    ],
     "bugs": {
         "url": "https://github.com/triniwiz/nativescript-popup/issues"
     },

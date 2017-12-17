@@ -21,7 +21,8 @@
         height:100,
         width:100,
         unit:'dp' | 'px' | '%',
-        elevation:10 // android only
+        elevation:10, // android only
+        borderRadius:25 // android only
     });
     const view = new Label();
     view.text = "Test";
