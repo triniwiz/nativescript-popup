@@ -1,10 +1,13 @@
-import { Common, PopupOptions } from './popup.common';
-import { View } from 'tns-core-modules/ui/core/view';
-import { topmost } from 'tns-core-modules/ui/frame';
-import { ios } from 'tns-core-modules/ui/utils';
-import { screen, device } from 'tns-core-modules/platform';
-import { layout } from 'tns-core-modules/utils/utils';
-import { Color } from 'tns-core-modules/color';
+import * as builder from "tns-core-modules/ui/builder";
+import * as fs from "tns-core-modules/file-system";
+import { Common, PopupOptions } from "./popup.common";
+import { View } from "tns-core-modules/ui/core/view";
+import { topmost } from "tns-core-modules/ui/frame";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
+import { ios } from "tns-core-modules/ui/utils";
+import { screen, device } from "tns-core-modules/platform";
+import { layout } from "tns-core-modules/utils/utils";
+import { Color } from "tns-core-modules/color";
 export class Popup extends Common {
   private _popupController: UIViewController;
   private _options: PopupOptions;
@@ -28,7 +31,7 @@ export class Popup extends Common {
     return new Promise((resolve, reject) => {
       this.reject = reject;
       this.resolve = resolve;
-      const isTablet = device.deviceType === 'Tablet';
+      const isTablet = device.deviceType === "Tablet";
       let nativeView;
       if (!this._popupController.popoverPresentationController.delegate) {
         this._popupController.popoverPresentationController.delegate = UIPopoverPresentationControllerDelegateImpl.initWithOwner(
@@ -43,102 +46,29 @@ export class Popup extends Common {
       if (this._options.hideArrow) {
         this._popupController.popoverPresentationController.permittedArrowDirections = 0;
       }
+
+      // check the view argument
       if (view instanceof View) {
         topmost()._addView(view);
-        let height;
-        let width;
-        switch (this._options.unit) {
-          case 'px':
-            if (this._options.height && !this._options.width) {
-              height = this._options.height;
-              width =
-                this._options.height *
-                (screen.mainScreen.widthPixels /
-                  screen.mainScreen.heightPixels);
-            } else if (this._options.width && !this._options.height) {
-              height =
-                this._options.width *
-                (screen.mainScreen.widthPixels /
-                  screen.mainScreen.heightPixels);
-              width = this._options.width;
-            } else {
-              width = this._options.width;
-              height = this._options.height;
-            }
-
-            ios._layoutRootView(
-              view,
-              CGRectMake(
-                0,
-                isTablet ? 0 : ios.getStatusBarHeight(),
-                layout.toDeviceIndependentPixels(width),
-                layout.toDeviceIndependentPixels(height)
-              )
-            );
-            break;
-          case '%':
-            if (this._options.height && !this._options.width) {
-              height =
-                screen.mainScreen.heightDIPs * (this._options.height / 100);
-              width =
-                height *
-                (screen.mainScreen.widthPixels /
-                  screen.mainScreen.heightPixels);
-            } else if (this._options.width && !this._options.height) {
-              width = screen.mainScreen.widthDIPs * (this._options.width / 100);
-              height =
-                width *
-                (screen.mainScreen.widthPixels /
-                  screen.mainScreen.heightPixels);
-            } else {
-              width = screen.mainScreen.widthDIPs * (this._options.width / 100);
-              height =
-                screen.mainScreen.heightDIPs * (this._options.height / 100);
-            }
-            ios._layoutRootView(
-              view,
-              CGRectMake(
-                0,
-                isTablet ? 0 : ios.getStatusBarHeight(),
-                width,
-                height
-              )
-            );
-            break;
-          default:
-            if (this._options.height && !this._options.width) {
-              height = this._options.height;
-              width =
-                this._options.height *
-                (screen.mainScreen.widthPixels /
-                  screen.mainScreen.heightPixels);
-            } else if (this._options.width && !this._options.height) {
-              height =
-                this._options.width *
-                (screen.mainScreen.widthPixels /
-                  screen.mainScreen.heightPixels);
-              width = this._options.width;
-            } else {
-              width = this._options.width ? this._options.width : 400;
-              height = this._options.height ? this._options.height : 320;
-            }
-            ios._layoutRootView(
-              view,
-              CGRectMake(
-                0,
-                isTablet ? 0 : ios.getStatusBarHeight(),
-                width,
-                height
-              )
-            );
-            break;
-        }
+        this._stylePopup(view, isTablet);
         this._popupController.preferredContentSize =
           view.nativeView.bounds.size;
         nativeView = view.nativeView;
       } else if (view instanceof UIView) {
         nativeView = view;
+      } else if (typeof view == "string" || view instanceof String) {
+        // this is a template so use the builder to load the template
+        this._stylePopup(view, isTablet);
+        const stack = new StackLayout();
+        topmost()._addView(stack);
+        stack.removeChildren(); // ensure nothing in the stack
+        const path = fs.knownFolders.currentApp().path;
+        const component = builder.load(path + view);
+        stack.addChild(component);
+        nativeView = stack.ios;
       }
+
+      // check the source argument
       if (source instanceof View) {
         this._popupController.popoverPresentationController.sourceView =
           source.nativeView;
@@ -179,6 +109,79 @@ export class Popup extends Common {
     this._popupController.dismissModalViewControllerAnimated(true);
     this.resolve = null;
     this.reject = null;
+  }
+
+  private _stylePopup(view, isTablet) {
+    let height;
+    let width;
+    switch (this._options.unit) {
+      case "px":
+        if (this._options.height && !this._options.width) {
+          height = this._options.height;
+          width =
+            this._options.height *
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
+        } else if (this._options.width && !this._options.height) {
+          height =
+            this._options.width *
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
+          width = this._options.width;
+        } else {
+          width = this._options.width;
+          height = this._options.height;
+        }
+
+        ios._layoutRootView(
+          view,
+          CGRectMake(
+            0,
+            isTablet ? 0 : ios.getStatusBarHeight(),
+            layout.toDeviceIndependentPixels(width),
+            layout.toDeviceIndependentPixels(height)
+          )
+        );
+        break;
+      case "%":
+        if (this._options.height && !this._options.width) {
+          height = screen.mainScreen.heightDIPs * (this._options.height / 100);
+          width =
+            height *
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
+        } else if (this._options.width && !this._options.height) {
+          width = screen.mainScreen.widthDIPs * (this._options.width / 100);
+          height =
+            width *
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
+        } else {
+          width = screen.mainScreen.widthDIPs * (this._options.width / 100);
+          height = screen.mainScreen.heightDIPs * (this._options.height / 100);
+        }
+        ios._layoutRootView(
+          view,
+          CGRectMake(0, isTablet ? 0 : ios.getStatusBarHeight(), width, height)
+        );
+        break;
+      default:
+        if (this._options.height && !this._options.width) {
+          height = this._options.height;
+          width =
+            this._options.height *
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
+        } else if (this._options.width && !this._options.height) {
+          height =
+            this._options.width *
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
+          width = this._options.width;
+        } else {
+          width = this._options.width ? this._options.width : 400;
+          height = this._options.height ? this._options.height : 320;
+        }
+        ios._layoutRootView(
+          view,
+          CGRectMake(0, isTablet ? 0 : ios.getStatusBarHeight(), width, height)
+        );
+        break;
+    }
   }
 }
 
