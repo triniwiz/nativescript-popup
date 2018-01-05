@@ -32,7 +32,6 @@ export class Popup extends Common {
       this.reject = reject;
       this.resolve = resolve;
       // check the view argument
-      debugger;
       if (view instanceof android.view.View) {
         this._popup.setContentView(view);
       } else if (view instanceof View) {
