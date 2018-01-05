@@ -1,0 +1,3 @@
+<StackLayout>
+    <Label text="NativeScript is the bomb.com" color="#ff4801" fontSize="22" textWrap="true" />
+</StackLayout>
