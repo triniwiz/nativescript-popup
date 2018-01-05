@@ -9,7 +9,7 @@ export class HelloWorldModel extends Observable {
   }
 
   showPopup(source, view) {
-    this.popup = new Popup({ width: 70, unit: '%', elevation: 10, borderRadius: 25 });
+    this.popup = new Popup({ height: 30, width: 70, unit: '%', elevation: 10, borderRadius: 25 });
     this.popup.showPopup(source, view).then(data => {
       console.log(data);
     });
