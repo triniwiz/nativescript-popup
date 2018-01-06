@@ -62,3 +62,7 @@ export function showPopupList() {
   });
   page.bindingContext.showPopup(page.getViewById('btnList'), list);
 }
+
+export function showTemplatePopup(args) {
+  page.bindingContext.showPopup(page.getViewById('btn'), '/template/bomb.xml');
+}
