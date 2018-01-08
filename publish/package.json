@@ -4,7 +4,6 @@
   "description": "Publish helper",
   "devDependencies": {
     "ncp": "^2.0.0",
-    "npm": "^4.6.1",
     "rimraf": "^2.5.0"
   }
 }

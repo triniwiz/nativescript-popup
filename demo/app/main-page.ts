@@ -6,12 +6,15 @@ import { StackLayout } from 'tns-core-modules/ui/layouts/stack-layout';
 import { ScrollView } from 'tns-core-modules/ui/scroll-view';
 import { ListView, ItemEventData } from 'tns-core-modules/ui/list-view';
 import { Button } from 'tns-core-modules/ui/button';
+import * as builder from 'tns-core-modules/ui/builder';
+import { fromObject } from 'tns-core-modules/data/observable';
+import * as fs from 'tns-core-modules/file-system';
 let page;
-// Event handler for Page 'loaded' event attached in main-page.xml
+let vm = new HelloWorldModel();
 export function pageLoaded(args: observable.EventData) {
   // Get the event sender
   page = <pages.Page>args.object;
-  page.bindingContext = new HelloWorldModel();
+  page.bindingContext = vm;
 }
 
 export function showPopup() {
@@ -44,25 +47,12 @@ export function showPopup() {
 }
 
 export function showPopupList() {
-  const list: any = new ListView();
-  list.height = '100%';
-  const items = [{ name: 'Osei' }, { name: 'Sean' }, { name: 'Brad' }
-  , { name: 'Some' }, { name: 'More' }, { name: 'Names' }, { name: 'To' }, { name: 'Make' }
-  , { name: 'This' }, { name: 'List' }, { name: 'Scroll' }];
-  list.items = items;
-  list.itemTemplate = `
-    <StackLayout>
-        <Label text="{{name}}"/>
-    </StackLayout>
-    `;
-  list.on('itemTap', (args: ItemEventData) => {
-    page.bindingContext.hidePopup(
-      `${items[args.index]['name']} : ${args.index}`
-    );
-  });
-  page.bindingContext.showPopup(page.getViewById('btnList'), list);
+  const listPath = fs.path.join(fs.knownFolders.currentApp().path, '/template/list.xml');
+  const component = builder.load(listPath);
+  component.bindingContext = vm;
+  page.bindingContext.showPopup(page.getViewById('btnList'), component);
 }
 
 export function showTemplatePopup(args) {
-  page.bindingContext.showPopup(page.getViewById('btn'), '/template/bomb.xml');
+  page.bindingContext.showPopup(page.getViewById('btn'), '~/template/bomb.xml');
 }

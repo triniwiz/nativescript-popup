@@ -1,0 +1,7 @@
+<ListView height="100%" items="{{items}}" itemTap="{{itemTap}}">
+    <ListView.itemTemplate>
+        <StackLayout>
+            <Label text="{{name}}"/>
+        </StackLayout>
+    </ListView.itemTemplate>
+</ListView>

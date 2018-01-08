@@ -36,19 +36,26 @@ export class Popup extends Common {
         this._popup.setContentView(view);
       } else if (view instanceof View) {
         frame.topmost()._addView(view);
-        this._stylePopup()
+        this._stylePopup();
         this._view = view;
         this._popup.setContentView(view.android);
-      } else if (typeof view == 'string' || view instanceof String) {
+      } else if (typeof view === 'string' || view instanceof String) {
         // this is a template so use the builder to load the template
         this._stylePopup();
         const stack = new StackLayout();
         frame.topmost()._addView(stack);
         stack.removeChildren(); // ensure nothing in the stack
-        const path = fs.knownFolders.currentApp().path;
-        const component = builder.load(
-            path + view
-        );
+        let path;
+        let component;
+        if (view.startsWith('~')) {
+          view = view.replace('~', '');
+          path = fs.knownFolders.currentApp().path;
+          console.log(fs.path.join(path, view));
+          component = builder.load(fs.path.join(path, view));
+          console.log(component);
+        } else {
+          component = builder.load(<any>view);
+        }
         stack.addChild(component);
         this._view = stack;
         this._popup.setContentView(stack.android);
@@ -81,13 +88,11 @@ export class Popup extends Common {
           height = this._options.height;
           width =
             this._options.height *
-            (screen.mainScreen.widthPixels /
-              screen.mainScreen.heightPixels);
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
         } else if (this._options.width && !this._options.height) {
           height =
             this._options.width *
-            (screen.mainScreen.widthPixels /
-              screen.mainScreen.heightPixels);
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
           width = this._options.width;
         } else {
           width = this._options.width;
@@ -96,22 +101,18 @@ export class Popup extends Common {
         break;
       case '%':
         if (this._options.height && !this._options.width) {
-          height =
-            screen.mainScreen.heightDIPs * (this._options.height / 100);
+          height = screen.mainScreen.heightDIPs * (this._options.height / 100);
           width =
             height *
-            (screen.mainScreen.widthPixels /
-              screen.mainScreen.heightPixels);
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
         } else if (this._options.width && !this._options.height) {
           width = screen.mainScreen.widthDIPs * (this._options.width / 100);
           height =
             width *
-            (screen.mainScreen.widthPixels /
-              screen.mainScreen.heightPixels);
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
         } else {
           width = screen.mainScreen.widthDIPs * (this._options.width / 100);
-          height =
-            screen.mainScreen.heightDIPs * (this._options.height / 100);
+          height = screen.mainScreen.heightDIPs * (this._options.height / 100);
         }
         break;
       default:
@@ -119,13 +120,11 @@ export class Popup extends Common {
           height = this._options.height;
           width =
             this._options.height *
-            (screen.mainScreen.widthPixels /
-              screen.mainScreen.heightPixels);
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
         } else if (this._options.width && !this._options.height) {
           height =
             this._options.width *
-            (screen.mainScreen.widthPixels /
-              screen.mainScreen.heightPixels);
+            (screen.mainScreen.widthPixels / screen.mainScreen.heightPixels);
           width = this._options.width;
         } else {
           width = this._options.width ? this._options.width : 400;
@@ -141,9 +140,7 @@ export class Popup extends Common {
       shape.setCornerRadius(this._options.borderRadius);
     }
     if (this._options && this._options.backgroundColor) {
-      shape.setColor(
-        new Color(this._options.backgroundColor).android
-      );
+      shape.setColor(new Color(this._options.backgroundColor).android);
     }
     (this._popup as any).setBackgroundDrawable(shape);
     if (parseInt(device.sdkVersion, 10) >= 21) {
