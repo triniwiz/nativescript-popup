@@ -22,12 +22,14 @@ export class Popup extends Common {
     );
     this._popup.setOnDismissListener(new android.widget.PopupWindow.OnDismissListener({
         onDismiss:  () => {
-            if (this.resolve) {
-                this.resolve(this.resolveData);
-            }
-            if (this._view) {
-                frame.topmost()._removeView(this._view);
-            }
+          if (this.resolve) {
+              this.resolve(this.resolveData);
+          }
+          this.resolve = null;
+          this.reject = null;
+          if (this._view) {
+              frame.topmost()._removeView(this._view);
+          }
         }
     }));
     if (options) {
