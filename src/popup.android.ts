@@ -10,6 +10,7 @@ import { screen, device } from 'tns-core-modules/platform';
 export class Popup extends Common {
   private _popup: android.widget.PopupWindow;
   private _options: PopupOptions;
+  private resolveData;
   resolve;
   reject;
   private _view;
@@ -19,6 +20,16 @@ export class Popup extends Common {
     this._popup = new android.widget.PopupWindow(
       utils.ad.getApplicationContext()
     );
+    this._popup.setOnDismissListener(new android.widget.PopupWindow.OnDismissListener({
+        onDismiss:  () => {
+            if (this.resolve) {
+                this.resolve(this.resolveData);
+            }
+            if (this._view) {
+                frame.topmost()._removeView(this._view);
+            }
+        }
+    }));
     if (options) {
       Object.keys(options).forEach(key => {
         this._options[key] = options[key];
@@ -70,13 +81,8 @@ export class Popup extends Common {
     });
   }
   public hidePopup(data?: any) {
-    if (this.resolve) {
-      this.resolve(data);
-    }
+    this.resolveData = data;
     this._popup.dismiss();
-    if (this._view) {
-      frame.topmost()._removeView(this._view);
-    }
   }
 
   private _stylePopup() {
