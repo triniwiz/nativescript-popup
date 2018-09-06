@@ -11,6 +11,7 @@ import { Color } from 'tns-core-modules/color';
 export class Popup extends Common {
   private _popupController: UIViewController;
   private _options: PopupOptions;
+  private resolveData;
   resolve;
   reject;
   constructor(options?: PopupOptions) {
@@ -106,14 +107,18 @@ export class Popup extends Common {
       }
     });
   }
-
-  public hidePopup(data?: any) {
+  
+  didDismiss = () => {
     if (this.resolve) {
-      this.resolve(data);
+      this.resolve(this.resolveData);
     }
-    this._popupController.dismissModalViewControllerAnimated(true);
     this.resolve = null;
     this.reject = null;
+  }
+
+  public hidePopup(data?: any) {
+    this.resolveData = data;
+    this._popupController.dismissModalViewControllerAnimated(true);
   }
 
   private _stylePopup(view, isTablet) {
@@ -206,9 +211,7 @@ export class UIPopoverPresentationControllerDelegateImpl extends NSObject
     popoverPresentationController: UIPopoverPresentationController
   ): void {
     if (this._owner.get()) {
-      this._owner.get().resolve();
-      this._owner.get().resolve = null;
-      this._owner.get().reject = null;
+      this._owner.get().didDismiss();
     }
   }
 }
