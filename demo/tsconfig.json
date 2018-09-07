@@ -28,8 +28,13 @@
         }
     },
     "exclude": [
+        "../src/node_modules",
         "node_modules",
         "platforms"
+    ],
+    "include": [
+        "../src",
+        "**/*"
     ],
     "compileOnSave": false
 }
