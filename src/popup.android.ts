@@ -43,7 +43,7 @@ export class Popup extends Common {
 
     public showPopup(source: any, view: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this._popup.setOutsideTouchable(true);
+            this._popup.setOutsideTouchable(this._options.outsideTouchble);
             this.reject = reject;
             this.resolve = resolve;
             // check the view argument
