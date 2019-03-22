@@ -26,7 +26,8 @@
         width:100,
         unit:'dp' | 'px' | '%',
         elevation:10, // android only
-        borderRadius:25 // android only
+        borderRadius:25, // android only
+        outsideTouchble: true,
     });
     const view = new Label();
     view.text = "Test";
