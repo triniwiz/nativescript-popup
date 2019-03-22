@@ -218,4 +218,12 @@ export class UIPopoverPresentationControllerDelegateImpl extends NSObject
             this._owner.get().didDismiss();
         }
     }
+
+    popoverPresentationControllerShouldDismissPopover(
+        popoverPresentationController: UIPopoverPresentationController
+    ): boolean {
+        if (this._owner.get()) {
+            return this._owner.get()._options.outsideTouchble;
+        }
+    }
 }

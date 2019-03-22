@@ -46,4 +46,6 @@ export interface PopupOptions {
    * Android Only - sets the border radius of the popup.
    */
   borderRadius?: number;
+
+  outsideTouchble?: boolean;
 }
