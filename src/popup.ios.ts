@@ -117,6 +117,10 @@ export class Popup extends Common {
         this.reject = null;
     }
 
+    getOptions = () => {
+        return this._options;
+    }
+
     public hidePopup(data?: any) {
         this.resolveData = data;
         this._popupController.dismissModalViewControllerAnimated(true);
@@ -221,9 +225,9 @@ export class UIPopoverPresentationControllerDelegateImpl extends NSObject
 
     popoverPresentationControllerShouldDismissPopover(
         popoverPresentationController: UIPopoverPresentationController
-    ): boolean {
+    ): any {
         if (this._owner.get()) {
-            return this._owner.get()._options.outsideTouchble;
+            return this._owner.get().getOptions().outsideTouchble;
         }
     }
 }
