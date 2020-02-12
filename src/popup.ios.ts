@@ -146,7 +146,7 @@ export class Popup extends Common {
                     height = this._options.height;
                 }
 
-                ios._layoutRootView(
+                layoutRootView(
                     view,
                     CGRectMake(
                         0,
@@ -171,7 +171,7 @@ export class Popup extends Common {
                     width = screen.mainScreen.widthDIPs * (this._options.width / 100);
                     height = screen.mainScreen.heightDIPs * (this._options.height / 100);
                 }
-                ios._layoutRootView(view, CGRectMake(0, 0, width, height));
+                layoutRootView(view, CGRectMake(0, 0, width, height));
                 break;
             default:
                 if (this._options.height && !this._options.width) {
@@ -192,10 +192,34 @@ export class Popup extends Common {
                         ? this._options.height
                         : isTablet ? 320 : 100;
                 }
-                ios._layoutRootView(view, CGRectMake(0, 0, width, height));
+                layoutRootView(view, CGRectMake(0, 0, width, height));
                 break;
         }
     }
+}
+
+/*
+  Replacement for _layoutRootView method removed in NativeScript 6
+*/
+var layoutRootView = function(rootView, parentBounds) {
+    if (!rootView || !parentBounds) {
+        return;
+    }
+
+    const size = parentBounds.size;
+    const width = layout.toDevicePixels(size.width);
+    const height = layout.toDevicePixels(size.height);
+
+    const widthSpec = layout.makeMeasureSpec(width, layout.EXACTLY);
+    const heightSpec = layout.makeMeasureSpec(height, layout.EXACTLY);
+
+    rootView.measure(widthSpec, heightSpec);
+
+    const origin = parentBounds.origin;
+    const left = origin.x;
+    const top = origin.y;
+
+    rootView.layout(left, top, width, height);
 }
 
 export class UIPopoverPresentationControllerDelegateImpl extends NSObject
